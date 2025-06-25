@@ -1,4 +1,4 @@
-export const employeesData = [
+export const dadosFuncionarios = [
     {
       id: 1,
       matricula: '23867',
@@ -61,39 +61,39 @@ export const employeesData = [
     }
   ];
   
-  export const calendarData = {
-    currentMonth: 'Março 2025',
-    days: [
-      { day: 1, type: 'normal' },
-      { day: 2, type: 'normal' },
-      { day: 3, type: 'holiday' },
-      { day: 4, type: 'holiday' },
-      { day: 5, type: 'work' },
-      { day: 6, type: 'normal' },
-      { day: 7, type: 'normal' },
-      { day: 8, type: 'normal' },
-      { day: 9, type: 'normal' },
-      { day: 10, type: 'normal' },
-      { day: 11, type: 'work' },
-      { day: 12, type: 'work' },
-      { day: 13, type: 'normal' },
-      { day: 14, type: 'normal' },
-      { day: 15, type: 'normal' },
-      { day: 16, type: 'normal' },
-      { day: 17, type: 'normal' },
-      { day: 18, type: 'work' },
-      { day: 19, type: 'work' },
-      { day: 20, type: 'normal' },
-      { day: 21, type: 'normal' },
-      { day: 22, type: 'normal' },
-      { day: 23, type: 'normal' },
-      { day: 24, type: 'normal' },
-      { day: 25, type: 'work' },
-      { day: 26, type: 'work' },
-      { day: 27, type: 'normal' },
-      { day: 28, type: 'normal' },
-      { day: 29, type: 'normal' },
-      { day: 30, type: 'normal' },
-      { day: 31, type: 'normal' }
+  export const dadosCalendario = {
+    mesAtual: 'Março 2025',
+    dias: [
+      { dia: 1, tipo: 'normal' },
+      { dia: 2, tipo: 'normal' },
+      { dia: 3, tipo: 'feriado' },
+      { dia: 4, tipo: 'feriado' },
+      { dia: 5, tipo: 'trabalho' },
+      { dia: 6, tipo: 'normal' },
+      { dia: 7, tipo: 'normal' },
+      { dia: 8, tipo: 'normal' },
+      { dia: 9, tipo: 'normal' },
+      { dia: 10, tipo: 'normal' },
+      { dia: 11, tipo: 'trabalho' },
+      { dia: 12, tipo: 'trabalho' },
+      { dia: 13, tipo: 'normal' },
+      { dia: 14, tipo: 'normal' },
+      { dia: 15, tipo: 'normal' },
+      { dia: 16, tipo: 'normal' },
+      { dia: 17, tipo: 'normal' },
+      { dia: 18, tipo: 'trabalho' },
+      { dia: 19, tipo: 'trabalho' },
+      { dia: 20, tipo: 'normal' },
+      { dia: 21, tipo: 'normal' },
+      { dia: 22, tipo: 'normal' },
+      { dia: 23, tipo: 'normal' },
+      { dia: 24, tipo: 'normal' },
+      { dia: 25, tipo: 'trabalho' },
+      { dia: 26, tipo: 'trabalho' },
+      { dia: 27, tipo: 'normal' },
+      { dia: 28, tipo: 'normal' },
+      { dia: 29, tipo: 'normal' },
+      { dia: 30, tipo: 'normal' },
+      { dia: 31, tipo: 'normal' }
     ]
   };

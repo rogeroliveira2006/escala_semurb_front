@@ -2,20 +2,20 @@ import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { X, CheckSquare, Square } from 'lucide-react';
 
-const initialNotifications = [
-  { id: 1, nome: 'Roger da Silva Oliveira', data: '24/05/2025', status: 'lida' },
-  { id: 2, nome: 'Vinícius Araujo de Jesus', data: '28/05/2025', status: 'a confirmar' },
-  { id: 3, nome: 'Luan Gustavo da Silva', data: '15/06/2025', status: 'lida' },
-  { id: 4, nome: 'Vanderleia Silva de Oliveira', data: '18/06/2025', status: 'a confirmar' },
-  { id: 5, nome: 'Mariana Costa', data: '20/06/2025', status: 'a confirmar' },
+const notificacoesIniciais = [
+  { id: 1, nome: 'Roger da Silva Oliveira', data: '24/05/2025', status: 'lida', tipo: 'Mudança de escala' },
+  { id: 2, nome: 'Vinícius Araujo de Jesus', data: '28/05/2025', status: 'a confirmar', tipo: 'Mudança de horário' },
+  { id: 3, nome: 'Luan Gustavo da Silva', data: '15/06/2025', status: 'lida', tipo: 'Mudança de setor' },
+  { id: 4, nome: 'Vanderleia Silva de Oliveira', data: '18/06/2025', status: 'a confirmar', tipo: 'Mudança no dia de folga' },
+  { id: 5, nome: 'Mariana Costa', data: '20/06/2025', status: 'a confirmar', tipo: 'Mudança de escala' },
 ];
 
-const NotificationsModal = ({ show, onClose }) => {
-  const [notifications, setNotifications] = useState(initialNotifications);
+const NotificationsModal = ({ exibir, aoFechar }) => {
+  const [notificacoes, setNotificacoes] = useState(notificacoesIniciais);
 
-  const toggleStatus = (id) => {
-    setNotifications(
-      notifications.map((notif) =>
+  const alternarStatus = (id) => {
+    setNotificacoes(
+      notificacoes.map((notif) =>
         notif.id === id ? { ...notif, status: notif.status === 'lida' ? 'a confirmar' : 'lida' } : notif
       )
     );
@@ -23,13 +23,13 @@ const NotificationsModal = ({ show, onClose }) => {
 
   return (
     <AnimatePresence>
-      {show && (
+      {exibir && (
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
           className="fixed inset-0 bg-black bg-opacity-50 flex items-start justify-end z-50 p-4"
-          onClick={onClose}
+          onClick={aoFechar}
         >
           <motion.div
             initial={{ x: '100%' }}
@@ -44,7 +44,7 @@ const NotificationsModal = ({ show, onClose }) => {
               <motion.button
                 whileHover={{ scale: 1.2, rotate: 90 }}
                 whileTap={{ scale: 0.9 }}
-                onClick={onClose}
+                onClick={aoFechar}
                 className="text-gray-500 hover:text-barueri-red"
               >
                 <X size={24} />
@@ -52,12 +52,12 @@ const NotificationsModal = ({ show, onClose }) => {
             </div>
             
             <div className="flex-grow overflow-y-auto p-4 space-y-4">
-              {notifications.map((notif, index) => (
+              {notificacoes.map((notif, indice) => (
                 <motion.div
                   key={notif.id}
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: index * 0.05 }}
+                  transition={{ delay: indice * 0.05 }}
                   className={`p-4 rounded-lg shadow-md border-l-4 ${
                     notif.status === 'lida'
                       ? 'bg-green-50 dark:bg-green-900/30 border-green-500'
@@ -68,7 +68,7 @@ const NotificationsModal = ({ show, onClose }) => {
                     <div>
                       <p className="font-bold text-gray-800 dark:text-white">{notif.nome}</p>
                       <p className="text-sm text-gray-600 dark:text-gray-400">
-                        Confirmou ciência da escala criada em {notif.data}.
+                        Confirmou ciência: <span className="font-semibold">{notif.tipo}</span> em {notif.data}.
                       </p>
                        <p className={`mt-2 text-xs font-bold uppercase ${
                         notif.status === 'lida' ? 'text-green-600 dark:text-green-400' : 'text-yellow-600 dark:text-yellow-400'
@@ -76,7 +76,7 @@ const NotificationsModal = ({ show, onClose }) => {
                         {notif.status}
                        </p>
                     </div>
-                    <button onClick={() => toggleStatus(notif.id)} className="ml-4 flex-shrink-0">
+                    <button onClick={() => alternarStatus(notif.id)} className="ml-4 flex-shrink-0">
                       {notif.status === 'lida' ? (
                         <CheckSquare size={20} className="text-green-500" />
                       ) : (

@@ -11,21 +11,22 @@ import DashboardPage from '@/pages/DashboardPage';
 import AdminPage from '@/pages/AdminPage';
 import ProfilePage from '@/pages/ProfilePage';
 import SettingsPage from '@/pages/SettingsPage';
+import DailySchedulePage from '@/pages/DailySchedulePage';
 import NotFoundPage from '@/pages/NotFoundPage';
 import Layout from '@/components/layout/Layout';
 
 function App() {
-  const location = useLocation();
+  const localizacao = useLocation();
 
   return (
     <>
       <Helmet>
-        <title>Escala Barueri - Mobilidade Urbana</title>
-        <meta name="description" content="Sistema de gestão de escalas e funcionários da Secretaria de Mobilidade Urbana da Prefeitura de Barueri" />
+        <title>Gestão de Escalas - SEMURB</title>
+        <meta name="description" content="Sistema de gestão de escalas e funcionários da Secretaria de Mobilidade Urbana." />
       </Helmet>
 
       <AnimatePresence mode="wait">
-        <Routes location={location} key={location.pathname}>
+        <Routes location={localizacao} key={localizacao.pathname}>
           <Route path="/" element={<Navigate to="/login" replace />} />
           <Route path="/login" element={<LoginPage />} />
           <Route path="/esqueci-senha" element={<ForgotPasswordPage />} />
@@ -35,6 +36,7 @@ function App() {
             <Route path="/administracao" element={<AdminPage />} />
             <Route path="/funcionario/:id" element={<ProfilePage />} />
             <Route path="/configuracoes" element={<SettingsPage />} />
+            <Route path="/escala-diaria/:data" element={<DailySchedulePage />} />
           </Route>
           <Route path="*" element={<NotFoundPage />} />
         </Routes>

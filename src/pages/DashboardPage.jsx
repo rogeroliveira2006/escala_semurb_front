@@ -4,35 +4,41 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Helmet } from 'react-helmet';
 import { BarChart, Search, Plus, ArrowLeft, ArrowRight } from 'lucide-react';
 import { useToast } from '@/components/ui/use-toast';
-import { employeesData } from '@/data/mockData';
+import { dadosFuncionarios } from '@/data/mockData';
 import CreateSectorModal from '@/components/modals/CreateSectorModal';
 
 const DashboardPage = () => {
-    const navigate = useNavigate();
+    const navegar = useNavigate();
     const { toast } = useToast();
-    const [currentDate, setCurrentDate] = useState(new Date(2025, 5, 1)); // June 2025
-    const [searchTerm, setSearchTerm] = useState('');
-    const [showCreateSectorModal, setShowCreateSectorModal] = useState(false);
+    const [dataAtual, setDataAtual] = useState(new Date());
+    const [termoBusca, setTermoBusca] = useState('');
+    const [exibirModalCriarSetor, setExibirModalCriarSetor] = useState(false);
 
-    const handlePrevMonth = () => {
-        setCurrentDate(prev => new Date(prev.getFullYear(), prev.getMonth() - 1, 1));
+    const tratarMesAnterior = () => {
+        setDataAtual(anterior => new Date(anterior.getFullYear(), anterior.getMonth() - 1, 1));
     };
 
-    const handleNextMonth = () => {
-        setCurrentDate(prev => new Date(prev.getFullYear(), prev.getMonth() + 1, 1));
+    const tratarProximoMes = () => {
+        setDataAtual(anterior => new Date(anterior.getFullYear(), anterior.getMonth() + 1, 1));
     };
 
-    const monthName = currentDate.toLocaleString('pt-BR', { month: 'long' });
-    const year = currentDate.getFullYear();
-    const daysInMonth = new Date(year, currentDate.getMonth() + 1, 0).getDate();
-    const firstDayOfMonth = new Date(year, currentDate.getMonth(), 1).getDay();
-    const diasCalendario = Array.from({ length: daysInMonth }, (_, i) => i + 1);
+    const nomeMes = dataAtual.toLocaleString('pt-BR', { month: 'long' });
+    const ano = dataAtual.getFullYear();
+    const diasNoMes = new Date(ano, dataAtual.getMonth() + 1, 0).getDate();
+    const primeiroDiaDoMes = new Date(ano, dataAtual.getMonth(), 1).getDay();
+    const diasCalendario = Array.from({ length: diasNoMes }, (_, i) => i + 1);
+
+    const tratarCliqueDia = (dia) => {
+        const dataSelecionada = new Date(ano, dataAtual.getMonth(), dia);
+        const dataFormatada = dataSelecionada.toISOString().split('T')[0];
+        navegar(`/escala-diaria/${dataFormatada}`);
+    };
 
     const setores = [
-        { nome: 'ADMINISTRAÇÃO', cor: 'bg-green-500 dark:bg-green-600', path: '/administracao'},
-        { nome: 'TRÂNSITO', cor: 'bg-blue-500 dark:bg-blue-600', path: '/confirmacoes'},
-        { nome: 'RH', cor: 'bg-red-500 dark:bg-red-600', path: '/administracao' },
-        { nome: 'ACESSIBILIDADE', cor: 'bg-orange-500 dark:bg-orange-600', path: '/administracao' },
+        { nome: 'ADMINISTRAÇÃO', cor: 'bg-green-500 dark:bg-green-600', caminho: '/administracao'},
+        { nome: 'TRÂNSITO', cor: 'bg-blue-500 dark:bg-blue-600', caminho: '/administracao'},
+        { nome: 'RH', cor: 'bg-red-500 dark:bg-red-600', caminho: '/administracao' },
+        { nome: 'ACESSIBILIDADE', cor: 'bg-orange-500 dark:bg-orange-600', caminho: '/administracao' },
     ];
     
     const dadosGrafico = [
@@ -41,27 +47,27 @@ const DashboardPage = () => {
         { escala: '12X36', funcionarios: 15 }, { escala: '24X48', funcionarios: 70 },
     ];
 
-    const maxFuncionarios = Math.max(...dadosGrafico.map(d => d.funcionarios));
+    const maximoFuncionarios = Math.max(...dadosGrafico.map(d => d.funcionarios));
 
-    const searchResults = useMemo(() => {
-        if (!searchTerm) return [];
-        return employeesData.filter(emp => emp.nome.toLowerCase().includes(searchTerm.toLowerCase()));
-    }, [searchTerm]);
+    const resultadosBusca = useMemo(() => {
+        if (!termoBusca) return [];
+        return dadosFuncionarios.filter(emp => emp.nome.toLowerCase().includes(termoBusca.toLowerCase()));
+    }, [termoBusca]);
 
-    const handleConfirmCreateSector = () => {
+    const tratarConfirmarCriarSetor = () => {
         toast({
             title: "✅ Sucesso!",
-            description: "Novo setor criado com sucesso (simulação).",
+            description: "Novo setor criado com sucesso.",
         });
     };
 
     return (
         <>
-            <Helmet><title>Dashboard - Escala Barueri</title></Helmet>
+            <Helmet><title>Dashboard - Gestão de Escalas</title></Helmet>
             <CreateSectorModal 
-                show={showCreateSectorModal}
-                onClose={() => setShowCreateSectorModal(false)}
-                onConfirm={handleConfirmCreateSector}
+                exibir={exibirModalCriarSetor}
+                aoFechar={() => setExibirModalCriarSetor(false)}
+                aoConfirmar={tratarConfirmarCriarSetor}
             />
             <motion.div
                 initial={{ opacity: 0, y: 20 }}
@@ -74,26 +80,26 @@ const DashboardPage = () => {
                     <input 
                         type="text" 
                         placeholder="Buscar funcionário..." 
-                        value={searchTerm}
-                        onChange={(e) => setSearchTerm(e.target.value)}
+                        value={termoBusca}
+                        onChange={(e) => setTermoBusca(e.target.value)}
                         className="w-full pl-12 pr-4 py-3 rounded-lg bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 focus:ring-2 focus:ring-barueri-yellow transition"
                     />
                     <AnimatePresence>
-                        {searchResults.length > 0 && (
+                        {resultadosBusca.length > 0 && (
                             <motion.ul 
                                 initial={{ opacity: 0, y: -10 }}
                                 animate={{ opacity: 1, y: 0 }}
                                 exit={{ opacity: 0, y: -10 }}
                                 className="absolute top-full mt-2 w-full bg-white dark:bg-gray-800 rounded-lg shadow-xl border border-gray-200 dark:border-gray-700 z-10 max-h-60 overflow-y-auto"
                             >
-                                {searchResults.map(emp => (
+                                {resultadosBusca.map(emp => (
                                     <li 
                                         key={emp.id} 
-                                        onClick={() => navigate(`/funcionario/${emp.matricula}`)}
+                                        onClick={() => navegar(`/funcionario/${emp.id}`)}
                                         className="px-4 py-3 hover:bg-yellow-100 dark:hover:bg-yellow-900/50 cursor-pointer border-b border-gray-100 dark:border-gray-700 last:border-b-0"
                                     >
                                         <p className="font-semibold">{emp.nome}</p>
-                                        <p className="text-sm text-gray-500 dark:text-gray-400">Setor: {setores[0].nome}</p>
+                                        <p className="text-sm text-gray-500 dark:text-gray-400">Setor: {setores.find(s => s.caminho === '/administracao')?.nome || 'N/D'}</p>
                                     </li>
                                 ))}
                             </motion.ul>
@@ -110,10 +116,10 @@ const DashboardPage = () => {
                                     <motion.div
                                         className="w-10 bg-barueri-yellow rounded-t-lg"
                                         initial={{ height: 0 }}
-                                        animate={{ height: `${(dado.funcionarios / maxFuncionarios) * 80}%` }}
+                                        animate={{ height: `${(dado.funcionarios / maximoFuncionarios) * 80}%` }}
                                         transition={{ duration: 0.8, ease: 'easeOut' }}
                                     >
-                                      <span className="text-xs text-barueri-black font-bold relative -top-5 left-1/2 -translate-x-1/2">{dado.funcionarios}</span>
+                                      <span className="text-xs text-barueri-black dark:text-white font-bold relative -top-5 left-1/2 -translate-x-1/2">{dado.funcionarios}</span>
                                     </motion.div>
                                     <span className="mt-2 text-sm font-semibold">{dado.escala}</span>
                                 </div>
@@ -127,7 +133,7 @@ const DashboardPage = () => {
                             {setores.map(setor => (
                                 <motion.button
                                     key={setor.nome}
-                                    onClick={() => navigate(setor.path)}
+                                    onClick={() => navegar(setor.caminho)}
                                     whileHover={{ scale: 1.05, y: -2 }}
                                     whileTap={{ scale: 0.95 }}
                                     className={`py-4 rounded-lg text-sm font-bold text-white shadow-md ${setor.cor}`}
@@ -135,7 +141,7 @@ const DashboardPage = () => {
                                     {setor.nome}
                                 </motion.button>
                             ))}
-                            <motion.button onClick={() => setShowCreateSectorModal(true)} whileHover={{ scale: 1.05, y: -2 }} whileTap={{ scale: 0.95 }} className="py-4 rounded-lg btn-brand-yellow flex items-center justify-center shadow-md">
+                            <motion.button onClick={() => setExibirModalCriarSetor(true)} whileHover={{ scale: 1.05, y: -2 }} whileTap={{ scale: 0.95 }} className="py-4 rounded-lg btn-brand-yellow flex items-center justify-center shadow-md">
                                 <Plus size={24} />
                             </motion.button>
                         </div>
@@ -144,17 +150,24 @@ const DashboardPage = () => {
 
                 <div className="card-bg p-6">
                     <div className="flex items-center justify-between mb-4">
-                      <motion.button onClick={handlePrevMonth} whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.9 }} className="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-700"><ArrowLeft className="text-barueri-yellow" /></motion.button>
-                      <h2 className="text-xl font-bold text-center capitalize">Consultar Datas: <span className="text-barueri-yellow">{monthName} {year}</span></h2>
-                      <motion.button onClick={handleNextMonth} whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.9 }} className="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-700"><ArrowRight className="text-barueri-yellow" /></motion.button>
+                      <motion.button onClick={tratarMesAnterior} whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.9 }} className="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-700"><ArrowLeft className="text-barueri-yellow" /></motion.button>
+                      <h2 className="text-xl font-bold text-center capitalize">Consultar Datas: <span className="text-barueri-yellow">{nomeMes} {ano}</span></h2>
+                      <motion.button onClick={tratarProximoMes} whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.9 }} className="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-700"><ArrowRight className="text-barueri-yellow" /></motion.button>
                     </div>
                     <div className="grid grid-cols-7 text-center font-semibold text-gray-500 dark:text-gray-400 border-b border-gray-200 dark:border-gray-700 pb-2">
                         <span>Dom</span><span>Seg</span><span>Ter</span><span>Qua</span><span>Qui</span><span>Sex</span><span>Sáb</span>
                     </div>
                     <div className="grid grid-cols-7 text-center mt-2 gap-1">
-                        {Array.from({ length: firstDayOfMonth }, (_, i) => <div key={`empty-${i}`}></div>)}
+                        {Array.from({ length: primeiroDiaDoMes }, (_, i) => <div key={`empty-${i}`}></div>)}
                         {diasCalendario.map(dia => (
-                            <div key={dia} className="p-2 rounded-full hover:bg-yellow-100 dark:hover:bg-yellow-900/50 cursor-pointer">{dia}</div>
+                            <motion.div 
+                                key={dia} 
+                                onClick={() => tratarCliqueDia(dia)}
+                                whileHover={{ scale: 1.1 }}
+                                className="p-2 rounded-full hover:bg-yellow-100 dark:hover:bg-yellow-900/50 cursor-pointer"
+                            >
+                                {dia}
+                            </motion.div>
                         ))}
                     </div>
                 </div>

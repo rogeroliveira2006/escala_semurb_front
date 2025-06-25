@@ -5,46 +5,47 @@ import { ArrowLeft, Home, Bell, Menu, User, Power, Settings } from 'lucide-react
 import DeactivateEmployeeModal from '@/components/modals/DeactivateEmployeeModal';
 import NotificationsModal from '@/components/modals/NotificationsModal';
 
-const getTitle = (pathname) => {
+const obterTitulo = (pathname) => {
   if (pathname.startsWith('/funcionario')) return 'Perfil do Funcionário';
   if (pathname.startsWith('/configuracoes')) return 'Configurações';
   if (pathname.startsWith('/administracao')) return 'Administração';
-  if (pathname.startsWith('/dashboard')) return 'Bem Vindo(a), Rogério!';
+  if (pathname.startsWith('/escala-diaria')) return 'Escala do Dia';
+  if (pathname.startsWith('/dashboard')) return 'Painel Principal';
   return 'Secretaria de MOBILIDADE URBANA';
 };
 
 const Header = () => {
-  const location = useLocation();
-  const navigate = useNavigate();
+  const localizacao = useLocation();
+  const navegar = useNavigate();
   const [menuAberto, setMenuAberto] = useState(false);
-  const [showDeactivateModal, setShowDeactivateModal] = useState(false);
-  const [showNotificationsModal, setShowNotificationsModal] = useState(false);
+  const [exibirModalDesativar, setExibirModalDesativar] = useState(false);
+  const [exibirModalNotificacoes, setExibirModalNotificacoes] = useState(false);
 
-  const handleBack = () => {
-    if (location.pathname === '/dashboard') {
-      navigate('/login');
-    } else if (location.pathname !== '/login') {
-       navigate(-1)
+  const tratarVoltar = () => {
+    if (localizacao.pathname === '/dashboard') {
+      navegar('/login');
+    } else if (localizacao.pathname !== '/login') {
+       navegar(-1)
     }
   };
 
-  const handleDeactivateClick = () => {
-    setShowDeactivateModal(true);
+  const tratarCliqueDesativar = () => {
+    setExibirModalDesativar(true);
     setMenuAberto(false);
   };
 
-  const menuItems = [
-    { label: 'Meu Perfil', icon: User, path: '/funcionario/23167' },
-    { label: 'Desligar Funcionário', icon: Power, action: handleDeactivateClick },
-    { label: 'Configurações', icon: Settings, path: '/configuracoes' },
+  const itensMenu = [
+    { rotulo: 'Meu Perfil', icone: User, caminho: '/funcionario/4' },
+    { rotulo: 'Desligar Funcionário', icone: Power, acao: tratarCliqueDesativar },
+    { rotulo: 'Configurações', icone: Settings, caminho: '/configuracoes' },
   ];
 
-  const pageTitle = getTitle(location.pathname);
+  const tituloPagina = obterTitulo(localizacao.pathname);
 
   return (
     <>
-      <DeactivateEmployeeModal show={showDeactivateModal} onClose={() => setShowDeactivateModal(false)} />
-      <NotificationsModal show={showNotificationsModal} onClose={() => setShowNotificationsModal(false)} />
+      <DeactivateEmployeeModal exibir={exibirModalDesativar} aoFechar={() => setExibirModalDesativar(false)} />
+      <NotificationsModal exibir={exibirModalNotificacoes} aoFechar={() => setExibirModalNotificacoes(false)} />
       <header className="main-header shadow-lg sticky top-0 z-40">
         <div className="container mx-auto px-4 py-3">
           <div className="flex items-center justify-between">
@@ -52,7 +53,7 @@ const Header = () => {
               <motion.button
                 whileHover={{ scale: 1.1 }}
                 whileTap={{ scale: 0.9 }}
-                onClick={handleBack}
+                onClick={tratarVoltar}
                 className="hover:text-white transition-colors"
               >
                 <ArrowLeft size={24} />
@@ -60,24 +61,24 @@ const Header = () => {
               <motion.button
                 whileHover={{ scale: 1.1 }}
                 whileTap={{ scale: 0.9 }}
-                onClick={() => navigate('/dashboard')}
+                onClick={() => navegar('/dashboard')}
                 className="hover:text-white transition-colors"
               >
                 <Home size={24} />
               </motion.button>
               <div>
-                <h1 className="text-lg md:text-xl font-bold uppercase tracking-wider">{pageTitle}</h1>
+                <h1 className="text-lg md:text-xl font-bold uppercase tracking-wider">{tituloPagina}</h1>
               </div>
             </div>
             
             <div className="flex items-center space-x-2 md:space-x-4">
               <div className="hidden md:block">
-                <img  alt="Logo Prefeitura de Barueri" className="h-12 w-auto" src="https://storage.googleapis.com/hostinger-horizons-assets-prod/acec149e-3587-41bf-87f0-d137ca8402b4/a3783b95683b963d785727eb0b68e7b8.png" />
+                <img  alt="Logo SEMURB" className="h-12 w-auto" src="https://storage.googleapis.com/hostinger-horizons-assets-prod/acec149e-3587-41bf-87f0-d137ca8402b4/3dba7a1c66148621c0c69c9add880646.png" />
               </div>
               <motion.button
                 whileHover={{ scale: 1.1, rotate: [0, 15, -15, 15, 0] }}
                 whileTap={{ scale: 0.9 }}
-                onClick={() => setShowNotificationsModal(true)}
+                onClick={() => setExibirModalNotificacoes(true)}
                 className="hover:text-white transition-colors"
               >
                 <Bell size={24} />
@@ -102,22 +103,22 @@ const Header = () => {
               className="absolute right-4 mt-2 w-64 bg-gray-900 text-white rounded-lg shadow-2xl p-4 z-50 border border-yellow-500/20"
             >
               <ul className="space-y-2">
-                {menuItems.map((item, index) => (
+                {itensMenu.map((item, index) => (
                   <li key={index}>
                     <Link
-                      to={item.path || '#'}
+                      to={item.caminho || '#'}
                       onClick={(e) => {
-                        if (item.action) {
+                        if (item.acao) {
                           e.preventDefault();
-                          item.action();
+                          item.acao();
                         } else {
                           setMenuAberto(false);
                         }
                       }}
                       className="flex items-center space-x-3 p-3 rounded-md hover:bg-barueri-yellow hover:text-barueri-black transition-colors"
                     >
-                      <item.icon size={20} />
-                      <span>{item.label}</span>
+                      <item.icone size={20} />
+                      <span>{item.rotulo}</span>
                     </Link>
                   </li>
                 ))}

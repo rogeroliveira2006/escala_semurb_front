@@ -2,21 +2,21 @@ import React from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { X, MailCheck } from 'lucide-react';
 
-const EmailVerificationModal = ({ show, onClose, onConfirm }) => {
-  const handleConfirm = (e) => {
+const EmailVerificationModal = ({ exibir, aoFechar, aoConfirmar }) => {
+  const tratarConfirmacao = (e) => {
     e.preventDefault();
-    onConfirm();
+    aoConfirmar();
   };
 
   return (
     <AnimatePresence>
-      {show && (
+      {exibir && (
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
           className="fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center z-50 p-4"
-          onClick={onClose}
+          onClick={aoFechar}
         >
           <motion.div
             initial={{ scale: 0.9, y: -50, opacity: 0 }}
@@ -29,7 +29,7 @@ const EmailVerificationModal = ({ show, onClose, onConfirm }) => {
             <motion.button
               whileHover={{ scale: 1.2, rotate: 90 }}
               whileTap={{ scale: 0.9 }}
-              onClick={onClose}
+              onClick={aoFechar}
               className="absolute -top-4 -right-4 bg-barueri-yellow text-barueri-black rounded-full p-1"
             >
               <X size={20} />
@@ -42,7 +42,7 @@ const EmailVerificationModal = ({ show, onClose, onConfirm }) => {
               Enviamos um código de 4 dígitos para o seu novo email. Insira-o abaixo para confirmar a alteração.
             </p>
             
-            <form onSubmit={handleConfirm} className="space-y-5">
+            <form onSubmit={tratarConfirmacao} className="space-y-5">
               <div className="flex justify-center space-x-2 md:space-x-4">
                 {[...Array(4)].map((_, i) => (
                   <input

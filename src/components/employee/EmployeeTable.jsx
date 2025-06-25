@@ -1,11 +1,11 @@
 import React from 'react';
 import EmployeeRow from '@/components/employee/EmployeeRow';
 
-const EmployeeTable = ({ employees, onEmployeeClick }) => {
+const EmployeeTable = ({ funcionarios, aoClicarFuncionario }) => {
   return (
-    <div className="bg-white rounded-xl shadow-lg overflow-hidden">
-      <div className="bg-gray-50 px-6 py-4 border-b">
-        <div className="grid grid-cols-5 gap-4 font-semibold text-gray-700">
+    <div className="card-bg overflow-hidden">
+      <div className="bg-gray-50 dark:bg-gray-900/50 p-4 border-b border-gray-200 dark:border-gray-700">
+        <div className="grid grid-cols-5 gap-4 font-bold text-gray-700 dark:text-gray-300">
           <div>Nº de Matrícula</div>
           <div>Nome</div>
           <div>Escala</div>
@@ -14,13 +14,13 @@ const EmployeeTable = ({ employees, onEmployeeClick }) => {
         </div>
       </div>
       
-      <div className="divide-y divide-gray-100">
-        {employees.map((employee, index) => (
+      <div className="divide-y divide-gray-100 dark:divide-gray-800">
+        {funcionarios.map((funcionario, indice) => (
           <EmployeeRow
-            key={employee.id}
-            employee={employee}
-            onEmployeeClick={onEmployeeClick}
-            index={index}
+            key={funcionario.id}
+            funcionario={funcionario}
+            aoClicarFuncionario={aoClicarFuncionario}
+            indice={indice}
           />
         ))}
       </div>

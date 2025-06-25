@@ -30,7 +30,7 @@
   --barueri-black: #111827;
   --barueri-dark-gray: #1f2937;
   --barueri-light-gray: #f9fafb;
-  --barueri-green: #58D68D;
+  --barueri-green: #229954;
   --barueri-orange: #F39C12;
   --barueri-red: #E74C3C;
   --barueri-blue: #2E86C1;
@@ -83,7 +83,7 @@
 }
 
 .btn-brand-green {
-  @apply bg-barueri-green text-white font-bold hover:bg-opacity-90 transition-all;
+  @apply bg-barueri-green dark:bg-green-800 text-white font-bold hover:bg-opacity-90 dark:hover:bg-green-700 transition-all;
 }
 .btn-brand-orange {
   @apply bg-barueri-orange text-white font-bold hover:bg-opacity-90 transition-all;

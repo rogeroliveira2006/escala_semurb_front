@@ -1,44 +1,44 @@
 import React, { createContext, useContext, useEffect, useState } from 'react';
 
-const ThemeProviderContext = createContext({
-  theme: 'light',
-  setTheme: () => null,
+const ContextoProvedorTema = createContext({
+  tema: 'light',
+  setTema: () => null,
 });
 
-export function ThemeProvider({ children, defaultTheme = 'light', storageKey = 'vite-ui-theme' }) {
-  const [theme, setTheme] = useState(() => localStorage.getItem(storageKey) || defaultTheme);
+export function ThemeProvider({ children, temaPadrao = 'light', chaveArmazenamento = 'vite-ui-theme' }) {
+  const [tema, setTema] = useState(() => localStorage.getItem(chaveArmazenamento) || temaPadrao);
 
   useEffect(() => {
     const root = window.document.documentElement;
     root.classList.remove('light', 'dark');
 
-    if (theme === 'system') {
-      const systemTheme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
-      root.classList.add(systemTheme);
+    if (tema === 'system') {
+      const temaSistema = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+      root.classList.add(temaSistema);
     } else {
-      root.classList.add(theme);
+      root.classList.add(tema);
     }
-  }, [theme]);
+  }, [tema]);
 
-  const value = {
-    theme,
-    setTheme: (newTheme) => {
-      localStorage.setItem(storageKey, newTheme);
-      setTheme(newTheme);
+  const valor = {
+    tema,
+    setTema: (novoTema) => {
+      localStorage.setItem(chaveArmazenamento, novoTema);
+      setTema(novoTema);
     },
   };
 
   return (
-    <ThemeProviderContext.Provider value={value}>
+    <ContextoProvedorTema.Provider value={valor}>
       {children}
-    </ThemeProviderContext.Provider>
+    </ContextoProvedorTema.Provider>
   );
 }
 
 export const useTheme = () => {
-  const context = useContext(ThemeProviderContext);
-  if (context === undefined) {
-    throw new Error('useTheme must be used within a ThemeProvider');
+  const contexto = useContext(ContextoProvedorTema);
+  if (contexto === undefined) {
+    throw new Error('useTheme deve ser usado dentro de um ThemeProvider');
   }
-  return context;
+  return contexto;
 };

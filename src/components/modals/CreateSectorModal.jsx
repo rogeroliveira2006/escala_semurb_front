@@ -3,37 +3,37 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { X, PlusCircle } from 'lucide-react';
 import ConfirmationModal from '@/components/modals/ConfirmationModal';
 
-const CreateSectorModal = ({ show, onClose, onConfirm }) => {
-  const [showConfirm, setShowConfirm] = useState(false);
+const CreateSectorModal = ({ exibir, aoFechar, aoConfirmar }) => {
+  const [exibirConfirmacao, setExibirConfirmacao] = useState(false);
 
-  const handleCreate = (e) => {
+  const tratarCriacao = (e) => {
     e.preventDefault();
-    setShowConfirm(true);
+    setExibirConfirmacao(true);
   };
 
-  const handleConfirmAction = () => {
-    setShowConfirm(false);
-    onConfirm();
-    onClose();
+  const tratarAcaoConfirmada = () => {
+    setExibirConfirmacao(false);
+    aoConfirmar();
+    aoFechar();
   };
 
   return (
     <>
       <ConfirmationModal
-        show={showConfirm}
-        onClose={() => setShowConfirm(false)}
-        onConfirm={handleConfirmAction}
-        title="Confirmar Criação"
-        description="Por favor, insira a senha de administrador para confirmar a criação do novo setor."
+        exibir={exibirConfirmacao}
+        aoFechar={() => setExibirConfirmacao(false)}
+        aoConfirmar={tratarAcaoConfirmada}
+        titulo="Confirmar Criação"
+        descricao="Por favor, insira a senha de administrador para confirmar a criação do novo setor."
       />
       <AnimatePresence>
-        {show && !showConfirm && (
+        {exibir && !exibirConfirmacao && (
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             className="fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center z-50 p-4"
-            onClick={onClose}
+            onClick={aoFechar}
           >
             <motion.div
               initial={{ scale: 0.9, y: -50, opacity: 0 }}
@@ -46,7 +46,7 @@ const CreateSectorModal = ({ show, onClose, onConfirm }) => {
               <motion.button
                 whileHover={{ scale: 1.2, rotate: 90 }}
                 whileTap={{ scale: 0.9 }}
-                onClick={onClose}
+                onClick={aoFechar}
                 className="absolute -top-4 -right-4 bg-barueri-yellow text-barueri-black rounded-full p-1"
               >
                 <X size={20} />
@@ -56,7 +56,7 @@ const CreateSectorModal = ({ show, onClose, onConfirm }) => {
                 Criar Novo Setor
               </h3>
               
-              <form onSubmit={handleCreate} className="space-y-5">
+              <form onSubmit={tratarCriacao} className="space-y-5">
                 <input
                   type="text"
                   placeholder="NOME DO SETOR"

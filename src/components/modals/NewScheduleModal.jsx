@@ -1,39 +1,39 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { X, Calendar, Clock, Check } from 'lucide-react';
+import { X, Calendar, Check } from 'lucide-react';
 import ConfirmationModal from '@/components/modals/ConfirmationModal';
 
-const NewScheduleModal = ({ show, onClose, onConfirm }) => {
-  const [showConfirm, setShowConfirm] = useState(false);
+const NewScheduleModal = ({ exibir, aoFechar, aoConfirmar }) => {
+  const [exibirConfirmacao, setExibirConfirmacao] = useState(false);
 
-  const handleCreate = (e) => {
+  const tratarCriacao = (e) => {
     e.preventDefault();
-    setShowConfirm(true);
+    setExibirConfirmacao(true);
   };
 
-  const handleConfirmAction = () => {
-    setShowConfirm(false);
-    onConfirm();
-    onClose();
+  const tratarAcaoConfirmada = () => {
+    setExibirConfirmacao(false);
+    aoConfirmar();
+    aoFechar();
   };
 
   return (
     <>
       <ConfirmationModal
-        show={showConfirm}
-        onClose={() => setShowConfirm(false)}
-        onConfirm={handleConfirmAction}
-        title="Confirmar Nova Escala"
-        description="Por favor, insira a senha de administrador para confirmar a criação da nova escala."
+        exibir={exibirConfirmacao}
+        aoFechar={() => setExibirConfirmacao(false)}
+        aoConfirmar={tratarAcaoConfirmada}
+        titulo="Confirmar Nova Escala"
+        descricao="Por favor, insira a senha de administrador para confirmar a criação da nova escala."
       />
       <AnimatePresence>
-        {show && !showConfirm && (
+        {exibir && !exibirConfirmacao && (
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             className="fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center z-50 p-4"
-            onClick={onClose}
+            onClick={aoFechar}
           >
             <motion.div
               initial={{ scale: 0.9, y: -50, opacity: 0 }}
@@ -46,7 +46,7 @@ const NewScheduleModal = ({ show, onClose, onConfirm }) => {
               <motion.button
                 whileHover={{ scale: 1.2, rotate: 90 }}
                 whileTap={{ scale: 0.9 }}
-                onClick={onClose}
+                onClick={aoFechar}
                 className="absolute -top-4 -right-4 bg-barueri-yellow text-barueri-black rounded-full p-1"
               >
                 <X size={20} />
@@ -56,7 +56,16 @@ const NewScheduleModal = ({ show, onClose, onConfirm }) => {
                 Nova Escala
               </h3>
               
-              <form onSubmit={handleCreate} className="space-y-6">
+              <form onSubmit={tratarCriacao} className="space-y-6">
+                 <div className="relative">
+                    <select className="w-full px-4 py-3 bg-white dark:bg-gray-700 border-2 border-barueri-yellow rounded-lg focus:ring-2 focus:ring-barueri-yellow focus:outline-none appearance-none font-semibold text-gray-500 dark:text-gray-300">
+                        <option>TIPO DE ALTERAÇÃO</option>
+                        <option>Mudança de escala</option>
+                        <option>Mudança no dia de folga</option>
+                        <option>Mudança de horário</option>
+                        <option>Mudança de setor</option>
+                    </select>
+                </div>
                 <div className="relative">
                   <input
                     type="text"
@@ -68,7 +77,7 @@ const NewScheduleModal = ({ show, onClose, onConfirm }) => {
                    <Calendar className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400" />
                 </div>
                  <div className="relative">
-                    <select className="w-full px-4 py-3 bg-white dark:bg-gray-700 border-2 border-barueri-yellow rounded-lg focus:ring-2 focus:ring-barueri-yellow focus:outline-none appearance-none font-semibold">
+                    <select className="w-full px-4 py-3 bg-white dark:bg-gray-700 border-2 border-barueri-yellow rounded-lg focus:ring-2 focus:ring-barueri-yellow focus:outline-none appearance-none font-semibold text-gray-500 dark:text-gray-300">
                         <option>ESCALA</option>
                         <option>5X1</option>
                         <option>5X2</option>

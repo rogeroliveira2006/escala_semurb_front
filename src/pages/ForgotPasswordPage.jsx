@@ -5,22 +5,24 @@ import { Helmet } from 'react-helmet';
 import { ArrowRight } from 'lucide-react';
 
 const ForgotPasswordPage = () => {
-  const navigate = useNavigate();
+  const navegar = useNavigate();
 
-  const handleRecovery = (e) => {
+  const tratarRecuperacao = (e) => {
     e.preventDefault();
-    navigate('/verificacao');
+    navegar('/verificacao');
   };
 
   return (
     <>
       <Helmet>
-        <title>Esqueci a Senha - Escala Barueri</title>
+        <title>Esqueci a Senha - Gestão de Escalas</title>
       </Helmet>
-      <div className="min-h-screen flex items-center justify-center p-4 bg-gray-200">
-        <div className="absolute inset-0 w-full h-full bg-cover bg-center" >
-          <img  className="w-full h-full object-cover" alt="Blurred calendar background" src="https://images.unsplash.com/photo-1698847783664-1062207df8ae" />
-        </div>
+      <div className="min-h-screen flex items-center justify-center p-4 bg-transparent">
+        <div 
+          className="absolute inset-0 w-full h-full bg-cover bg-center" 
+          style={{ backgroundImage: `url('https://storage.googleapis.com/hostinger-horizons-assets-prod/acec149e-3587-41bf-87f0-d137ca8402b4/b0a5e7fd50891554ff91cb07a1742657.png')` }}
+        ></div>
+        <div className="absolute inset-0 w-full h-full bg-black opacity-50"></div>
         <motion.div
           initial={{ opacity: 0, scale: 0.9 }}
           animate={{ opacity: 1, scale: 1 }}
@@ -37,7 +39,7 @@ const ForgotPasswordPage = () => {
           <div className="w-full md:w-2/3 bg-white p-12 flex flex-col justify-center">
             <h2 className="text-3xl font-bold text-gray-800">Esqueceu sua senha?</h2>
             <p className="text-gray-500 mb-8">Sem problemas! Insira sua matrícula para enviarmos um código de verificação.</p>
-            <form onSubmit={handleRecovery} className="space-y-6">
+            <form onSubmit={tratarRecuperacao} className="space-y-6">
               <div>
                 <label className="text-sm font-bold text-gray-600 block mb-2">Numero de Matrícula</label>
                 <input

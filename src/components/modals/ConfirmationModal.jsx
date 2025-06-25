@@ -2,21 +2,21 @@ import React from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { X, ShieldCheck } from 'lucide-react';
 
-const ConfirmationModal = ({ show, onClose, onConfirm, title, description }) => {
-  const handleConfirm = (e) => {
+const ConfirmationModal = ({ exibir, aoFechar, aoConfirmar, titulo, descricao }) => {
+  const tratarConfirmacao = (e) => {
     e.preventDefault();
-    onConfirm();
+    aoConfirmar();
   };
 
   return (
     <AnimatePresence>
-      {show && (
+      {exibir && (
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
           className="fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center z-50 p-4"
-          onClick={onClose}
+          onClick={aoFechar}
         >
           <motion.div
             initial={{ scale: 0.9, y: -50, opacity: 0 }}
@@ -29,20 +29,20 @@ const ConfirmationModal = ({ show, onClose, onConfirm, title, description }) => 
             <motion.button
               whileHover={{ scale: 1.2, rotate: 90 }}
               whileTap={{ scale: 0.9 }}
-              onClick={onClose}
+              onClick={aoFechar}
               className="absolute -top-4 -right-4 bg-barueri-red text-white rounded-full p-1"
             >
               <X size={20} />
             </motion.button>
             
             <h3 className="text-3xl font-extrabold text-barueri-red text-center mb-4 uppercase">
-              {title || 'Confirmação Necessária'}
+              {titulo || 'Confirmação Necessária'}
             </h3>
             <p className="text-center text-gray-600 dark:text-gray-300 mb-6">
-              {description || 'Por favor, insira a senha para confirmar esta ação.'}
+              {descricao || 'Por favor, insira a senha para confirmar esta ação.'}
             </p>
             
-            <form onSubmit={handleConfirm} className="space-y-5">
+            <form onSubmit={tratarConfirmacao} className="space-y-5">
               <input
                 type="password"
                 placeholder="SENHA DO ADMINISTRADOR"

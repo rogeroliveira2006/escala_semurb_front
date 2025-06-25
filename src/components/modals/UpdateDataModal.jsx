@@ -4,62 +4,62 @@ import { X, Mail, KeyRound, ArrowRight } from 'lucide-react';
 import ConfirmationModal from '@/components/modals/ConfirmationModal';
 import EmailVerificationModal from '@/components/modals/EmailVerificationModal';
 
-const UpdateDataModal = ({ show, onClose, onConfirm, employee }) => {
-  const [showConfirm, setShowConfirm] = useState(false);
-  const [showEmailVerify, setShowEmailVerify] = useState(false);
-  const [formData, setFormData] = useState({
-    email: employee?.email || '',
+const UpdateDataModal = ({ exibir, aoFechar, aoConfirmar, funcionario }) => {
+  const [exibirConfirmacao, setExibirConfirmacao] = useState(false);
+  const [exibirVerificacaoEmail, setExibirVerificacaoEmail] = useState(false);
+  const [dadosFormulario, setDadosFormulario] = useState({
+    email: funcionario?.email || '',
     senha: '',
   });
 
-  const handleChange = (e) => {
+  const tratarMudanca = (e) => {
     const { name, value } = e.target;
-    setFormData(prev => ({ ...prev, [name]: value }));
+    setDadosFormulario(prev => ({ ...prev, [name]: value }));
   };
 
-  const handleUpdate = (e) => {
+  const tratarAtualizacao = (e) => {
     e.preventDefault();
-    setShowConfirm(true);
+    setExibirConfirmacao(true);
   };
   
-  const handleConfirmUpdate = () => {
-    setShowConfirm(false);
-    if(formData.email !== employee.email) {
-      setShowEmailVerify(true);
+  const tratarConfirmacaoAtualizacao = () => {
+    setExibirConfirmacao(false);
+    if(dadosFormulario.email !== funcionario.email) {
+      setExibirVerificacaoEmail(true);
     } else {
-      onConfirm(formData);
-      onClose();
+      aoConfirmar(dadosFormulario);
+      aoFechar();
     }
   };
 
-  const handleConfirmEmail = () => {
-    setShowEmailVerify(false);
-    onConfirm(formData);
-    onClose();
+  const tratarConfirmacaoEmail = () => {
+    setExibirVerificacaoEmail(false);
+    aoConfirmar(dadosFormulario);
+    aoFechar();
   };
 
   return (
     <>
       <ConfirmationModal
-        show={showConfirm}
-        onClose={() => setShowConfirm(false)}
-        onConfirm={handleConfirmUpdate}
-        title="Confirmar Alterações"
-        description="Por favor, insira a senha de administrador para confirmar as alterações nos dados do funcionário."
+        exibir={exibirConfirmacao}
+        aoFechar={() => setExibirConfirmacao(false)}
+        aoConfirmar={tratarConfirmacaoAtualizacao}
+        titulo="Confirmar Alterações"
+        descricao="Por favor, insira a senha de administrador para confirmar as alterações nos dados do funcionário."
       />
       <EmailVerificationModal
-        show={showEmailVerify}
-        onClose={() => setShowEmailVerify(false)}
-        onConfirm={handleConfirmEmail}
+        exibir={exibirVerificacaoEmail}
+        aoFechar={() => setExibirVerificacaoEmail(false)}
+        aoConfirmar={tratarConfirmacaoEmail}
       />
       <AnimatePresence>
-        {show && !showConfirm && !showEmailVerify && (
+        {exibir && !exibirConfirmacao && !exibirVerificacaoEmail && (
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             className="fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center z-50 p-4"
-            onClick={onClose}
+            onClick={aoFechar}
           >
             <motion.div
               initial={{ scale: 0.9, y: -50, opacity: 0 }}
@@ -72,7 +72,7 @@ const UpdateDataModal = ({ show, onClose, onConfirm, employee }) => {
               <motion.button
                 whileHover={{ scale: 1.2, rotate: 90 }}
                 whileTap={{ scale: 0.9 }}
-                onClick={onClose}
+                onClick={aoFechar}
                 className="absolute -top-4 -right-4 bg-barueri-yellow text-barueri-black rounded-full p-1"
               >
                 <X size={20} />
@@ -83,14 +83,14 @@ const UpdateDataModal = ({ show, onClose, onConfirm, employee }) => {
               </h3>
                <p className="text-center text-gray-500 dark:text-gray-300 mb-6 font-semibold">Atualize os dados do funcionário</p>
               
-              <form onSubmit={handleUpdate} className="space-y-5">
+              <form onSubmit={tratarAtualizacao} className="space-y-5">
                 <div className="relative">
                   <Mail className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
                   <input
                     type="email"
                     name="email"
-                    value={formData.email}
-                    onChange={handleChange}
+                    value={dadosFormulario.email}
+                    onChange={tratarMudanca}
                     placeholder="EMAIL"
                     className="w-full pl-10 pr-4 py-3 bg-white dark:bg-gray-700 border-2 border-barueri-yellow rounded-lg focus:ring-2 focus:ring-barueri-yellow focus:outline-none placeholder:text-gray-500 placeholder:font-semibold"
                   />
@@ -100,8 +100,8 @@ const UpdateDataModal = ({ show, onClose, onConfirm, employee }) => {
                   <input
                     type="password"
                     name="senha"
-                    value={formData.senha}
-                    onChange={handleChange}
+                    value={dadosFormulario.senha}
+                    onChange={tratarMudanca}
                     placeholder="NOVA SENHA (OPCIONAL)"
                     className="w-full pl-10 pr-4 py-3 bg-white dark:bg-gray-700 border-2 border-barueri-yellow rounded-lg focus:ring-2 focus:ring-barueri-yellow focus:outline-none placeholder:text-gray-500 placeholder:font-semibold"
                   />
