@@ -1,0 +1,2 @@
+const supaURL = 'https://strdxcvdgqxvulklvvrq.supabase.co'
+const annoKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InN0cmR4Y3ZkZ3F4dnVsa2x2dnJxIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDk1NDczMzQsImV4cCI6MjA2NTEyMzMzNH0.5KPOsnqdXJWzZr_jZVBSCdUzVEgZSs8EGjUcU5nWwIM'
